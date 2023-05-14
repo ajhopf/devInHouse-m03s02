@@ -73,4 +73,12 @@ describe('ContentComponent', () => {
 		expect(component.listaDeNotificacoes).toEqual(NOTIFICATIONS_MOCK);
 	});
 
+	it('removerNotificacao - should call atualizarLista method with success', () => {
+		spyOn(component, 'atualizarLista');
+		notificationService.removeNotification.and.returnValue(of({}));
+		component.removerNotificacao(1);
+
+		expect(component.atualizarLista).toHaveBeenCalled();
+	});
+
 })
