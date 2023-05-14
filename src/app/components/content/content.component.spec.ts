@@ -58,4 +58,10 @@ describe('ContentComponent', () => {
 		expect(component.atualizarLista).toHaveBeenCalled();
 	});
 
+	it('atualizarLista - should call carregarNotificacoes method with success', () => {
+		spyOn(component, 'carregarNotificacoes');
+		component.atualizarLista();
+		expect(component.carregarNotificacoes).toHaveBeenCalled();
+	});
+
 })
