@@ -2,16 +2,24 @@ import { ContentComponent } from "./content.component";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { HttpClientModule } from "@angular/common/http";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { INotificacao } from "../../models/notificacao.model";
+import { NotificationService } from "../../services/notification.service";
+import { of } from "rxjs";
 
 describe('ContentComponent', () => {
 	let component: ContentComponent;
 	let fixture: ComponentFixture<ContentComponent>;
+	let notificationService = jasmine.createSpyObj(
+		NotificationService,
+		['getNotifications', 'editNotificationApi', 'removeNotification']
+	);
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			declarations: [ContentComponent],
 			imports: [HttpClientModule],
-			schemas: [CUSTOM_ELEMENTS_SCHEMA]
+			schemas: [CUSTOM_ELEMENTS_SCHEMA],
+			providers:[{provide: NotificationService, useValue: notificationService}]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(ContentComponent);
@@ -22,11 +30,32 @@ describe('ContentComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('ngOnInit - deve chamar o método carregarNotificacoes com sucesso', () =>{
+	it('ngOnInit - should callcarregarNotificacoes method with success', () =>{
 		spyOn(component, 'carregarNotificacoes');
 		component.ngOnInit();
 
 		expect(component.carregarNotificacoes).toHaveBeenCalled();
+	});
+
+	it('lerNotificacao - should call atualizarLista method with success', () => {
+		spyOn(component, 'atualizarLista');
+
+		const notificationMock: INotificacao = {
+			aplicativo: '',
+			lido: false,
+			descricao: '',
+			imagem: '',
+			titulo: '',
+			tempoPublicacao: ''
+		};
+
+		const readNotification = {...notificationMock, lido: true};
+
+		notificationService.editNotificationApi.and.returnValue(of({}));
+
+		component.lerNotificacao(notificationMock);
+		expect(notificationService.editNotificationApi).toHaveBeenCalledOnceWith(readNotification);
+		expect(component.atualizarLista).toHaveBeenCalled();
 	});
 
 })
