@@ -22,4 +22,11 @@ describe('ContentComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
+	it('ngOnInit - deve chamar o método carregarNotificacoes com sucesso', () =>{
+		spyOn(component, 'carregarNotificacoes');
+		component.ngOnInit();
+
+		expect(component.carregarNotificacoes).toHaveBeenCalled();
+	});
+
 })
