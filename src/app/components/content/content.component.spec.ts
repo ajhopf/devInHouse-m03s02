@@ -5,13 +5,14 @@ import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { INotificacao } from "../../models/notificacao.model";
 import { NotificationService } from "../../services/notification.service";
 import { of } from "rxjs";
+import { NOTIFICATIONS_MOCK } from "../../utils/notifications-mock";
 
 describe('ContentComponent', () => {
 	let component: ContentComponent;
 	let fixture: ComponentFixture<ContentComponent>;
 	let notificationService = jasmine.createSpyObj(
 		NotificationService,
-		['getNotifications', 'editNotificationApi', 'removeNotification']
+		['getNotifications', 'getNotificationsApi', 'editNotificationApi', 'removeNotification']
 	);
 
 	beforeEach(async () => {
@@ -62,6 +63,14 @@ describe('ContentComponent', () => {
 		spyOn(component, 'carregarNotificacoes');
 		component.atualizarLista();
 		expect(component.carregarNotificacoes).toHaveBeenCalled();
+	});
+
+	it('carregarNotificacoes - should return values to listaDeNotificacoes with success', () => {
+		notificationService.getNotificationsApi.and.returnValue(of(NOTIFICATIONS_MOCK));
+
+		component.carregarNotificacoes();
+		expect(notificationService.getNotificationsApi).toHaveBeenCalled();
+		expect(component.listaDeNotificacoes).toEqual(NOTIFICATIONS_MOCK);
 	});
 
 })
