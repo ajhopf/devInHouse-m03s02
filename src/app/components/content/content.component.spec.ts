@@ -81,4 +81,4 @@ describe('ContentComponent', () => {
 		expect(component.atualizarLista).toHaveBeenCalled();
 	});
 
-})
+});
